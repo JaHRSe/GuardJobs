@@ -1,3 +1,3 @@
-from src.GuardJobs.NY.CrawlNY import getCrawler
+from src.GuardJobs.NY.CrawlNY import get_crawler
 
-nyCrawler = getCrawler()
+nyCrawler = get_crawler()

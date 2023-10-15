@@ -7,7 +7,7 @@ class Crawler(ABC):
     # def __init__(self, website):
     # self.website = website
 
-    def getPage(self, url):
+    def get_page(self, url):
         try:
             html = urlopen(url)
         except Exception as e:
@@ -15,7 +15,7 @@ class Crawler(ABC):
             return None
         return BeautifulSoup(html, 'html.parser')
 
-    def safeGet(self, bs, selector):
+    def safe_get(self, bs, selector):
         """return text form html object
             ARGS:
                 bs (BeutifulSoup): Object with target HTML
@@ -29,13 +29,8 @@ class Crawler(ABC):
         return None
 
     @abstractclassmethod
-    def getTechJobs(self):
-        """return dictionay of available technician jobs indexed by job id"""
-        pass
-
-    @abstractclassmethod
-    def getAgrJobs(self):
-        """return dictionay of available AGR jobs indexed by job id"""
+    def get_jobs_data(self):
+        """returns array of  job objects, generic for each job type"""
         pass
 
     @abstractclassmethod
