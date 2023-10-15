@@ -2,8 +2,25 @@ from .job import Job
 
 
 class AGRJob(Job):
-    def __init__(self, id, pos_title, ad_range, location, close, military_grade):
-        super().__init__(id, pos_title, military_grade)
-        self.ad_range = ad_range
-        self.location = location
-        self.close = close
+    def __init__(self,
+                 posting_id,
+                 branch,
+                 pos_title,
+                 mil_specialty_code,
+                 location,
+                 close_date,
+                 mil_rank_min,
+                 mil_rank_max,
+                 canceled,
+                 ):
+        super().__init__(
+            posting_id,
+            branch,
+            pos_title,
+            mil_specialty_code,
+            location,
+            close_date,
+            mil_rank_min,
+            mil_rank_max,
+            canceled
+        )

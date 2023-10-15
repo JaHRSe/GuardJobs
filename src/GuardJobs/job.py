@@ -1,8 +1,20 @@
 class Job:
-    def __init__(self, id, pos_title, military_grade):
-        self.id = id
+    def __init__(self,
+                 posting_id,
+                 branch,
+                 pos_title,
+                 mil_specialty_code,
+                 location,
+                 close_date,
+                 mil_rank_min,
+                 mil_rank_max,
+                 canceled,
+                 ):
+        self.posting_id = posting_id
         self.pos_title = pos_title
-        self.military_grade = military_grade
+        self.mil_rank_min = mil_rank_min,
+        self.mil_rank_max = mil_rank_max,
+        self.canceled = canceled
 
     def __str__(self):
         attributes = ', '.join(

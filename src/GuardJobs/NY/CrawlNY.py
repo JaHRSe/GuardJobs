@@ -80,6 +80,16 @@ class NyCrawler(Crawler):
             ))
         return civ_jobs
 
+    def get_branch(self, html):
+        """Recieves html blob of job listing, converts it to a string and searches for branch
+            for some reason, BeuitfulSoup can not parse out <tr> so this is a work around
+        Args:
+            html (BeutifulSoup result): BeutifulSoup parses table and returns row
+        """
+        branch = next((value for value in ['air', 'army', 'joint'] if value in str(
+            html).split('\n')[0]), None)
+        return branch
+
     def process_agr_data(self, job_list):
         """Scrapes AGR job postings on DMNA website
 
@@ -91,17 +101,32 @@ class NyCrawler(Crawler):
         agr_jobs = []
         for index in range(1, len(job_list)):  # cut off header row
             html = job_list[index]
-            # check if cancelled
-            cancelled = bool(html.find_all('div', class_='cancelled'))
-            if cancelled:
-                continue
-            description_doc_url = html.select('a')[0].get('href')
+            branch = self.get_branch(html)
+            canceled = bool(html.find_all('div', class_='cancelled'))
+            description_doc_url = None if canceled else html.select('a')[
+                0].get('href')
             cells = html.select('td')
+            posting_id = cells[0].get_text()
             pos_title = cells[1].get_text()
-            mil_job_code = cells[2].get_text()
-            min_rank, max_rank = cells[3].get_text(
+            mil_specialty_code = cells[2].get_text()
+            mil_rank_min, mil_rank_max = cells[3].get_text(
                 separator='\n').strip().split('\n')
-            print(min_rank, max_rank)
+            location = cells[4].get_text()
+            close_date = cells[5].get_text()
+            agr_jobs.append(
+                AGRJob(
+                    posting_id,
+                    branch,
+                    pos_title,
+                    mil_specialty_code,
+                    location,
+                    close_date,
+                    mil_rank_min,
+                    mil_rank_max,
+                    canceled
+                )
+            )
+        return agr_jobs
 
     def get_jobs_data(self, page_BS, processor):
         job_list = page_BS.select(self.JOBTABLECLASS)[0].select('tr')
